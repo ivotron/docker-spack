@@ -1,13 +1,16 @@
 # docker-spack
 
-Base image to install packages from source using Spack.
+Build docker images by installing packages from source using 
+[Spack](https://github.com/LLNL/spack).
 
 Example `Dockerfile`:
 
 ```
-FROM ivotron/spack:develop
+FROM ivotron/spack
 
 RUN $SPACK_ROOT/bin/spack install wget
+ADD entrypoint.sh /root/
+ENTRYPOINT ["/root/entrypoint.sh"]
 ```
 
 And corresponding `entrypoint.sh`:
