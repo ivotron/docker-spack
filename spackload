@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+
+. $SPACK_ROOT/share/spack/setup-env.sh
+
+for pkg in $@; do
+  echo "Loading package $pkg"
+  export PATH=`spack location --install-dir $pkg`/bin:$PATH
+done
