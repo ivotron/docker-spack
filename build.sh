@@ -51,11 +51,11 @@ BASE_IMAGES=(
 #  'ubuntu:12.04'
 # }
 
-SPACK_VERSION="v0.11.2"
+SPACK_VERSION="develop"
 
 function build {
   cp Dockerfile.$1 Dockerfile
-  sed -i "s/{{BASE_IMG}}/${2}/" Dockerfile
+  sed -i '' "s/{{BASE_IMG}}/${2}/" Dockerfile
 
   TAG=${SPACK_VERSION}-$(echo $2 | sed 's/:/-/')
   IMG=ivotron/spack:$TAG

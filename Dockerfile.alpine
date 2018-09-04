@@ -2,14 +2,14 @@ FROM {{BASE_IMG}}
 
 ARG SPACK_VERSION
 
-RUN apk update && \
-    apk add build-base wget tar python2 curl bash && \
-    wget --no-check-certificate -O - https://github.com/LLNL/spack/archive/${SPACK_VERSION}.tar.gz | tar xz && \
-    mv /spack-* /spack && \
-    rm -rf /var/cache/apk/*
+RUN apk update \
+ && apk add build-base wget tar python2 curl bash gfortran patch perl linux-headers xz \
+ && wget --no-check-certificate -O - https://github.com/LLNL/spack/archive/${SPACK_VERSION}.tar.gz | tar xz \
+ && mv /spack-* /spack \
+ && rm -rf /var/cache/apk/*
 
 ENV SPACK_ROOT=/spack
-ENV PATH=$PATH:/spack/bin
+ENV PATH=/usr/local/bin/patch:$PATH:/spack/bin
 
 COPY spackload /usr/bin/
 
