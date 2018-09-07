@@ -12,4 +12,6 @@ ENV PATH=$PATH:/spack/bin
 
 COPY spackload /usr/bin/
 
+RUN spack bootstrap
+
 ENTRYPOINT ["spack"]
