@@ -1,8 +1,0 @@
-#!/bin/bash
-set -e
-
-. $SPACK_ROOT/share/spack/setup-env.sh
-
-for pkg in $@; do
-  spack load $pkg
-done

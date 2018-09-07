@@ -1,9 +1,7 @@
 # docker-spack
 
 Build docker images by installing packages from source using 
-[Spack](https://github.com/spack/spack).
-
-Example `Dockerfile`:
+[Spack](https://github.com/spack/spack). Example `Dockerfile`:
 
 ```Dockerfile
 FROM ivotron/spack:v0.11.2-ubuntu-16.04
@@ -18,7 +16,10 @@ And corresponding `entrypoint.sh`:
 
 ```bash
 #!/bin/bash
-spackload wget tree
+source $SPACK_ROOT/share/spack/setup-env.sh
+
+spack load wget tree
+
 tree /
 exec wget $@
 ```

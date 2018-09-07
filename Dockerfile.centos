@@ -2,16 +2,16 @@ FROM {{BASE_IMG}}
 
 ARG SPACK_VERSION
 
-RUN yum -y install wget gcc gcc-c++ gcc-gfortran make glibc-devel tar curl python perl patch unzip \
+RUN yum -y install \
+      wget gcc gcc-c++ gcc-gfortran make glibc-devel tar curl python perl patch 
+      unzip git \
  && yum clean all \
  && wget --no-check-certificate -O - https://github.com/LLNL/spack/archive/${SPACK_VERSION}.tar.gz | tar xz \
- && mv /spack-* /spack
+ && mv /spack-* /spack \
+ && source /spack/share/spack/setup-env.sh \
+ && spack bootstrap
 
 ENV SPACK_ROOT=/spack
 ENV PATH=$PATH:/spack/bin
-
-COPY spackload /usr/bin/
-
-RUN spack bootstrap
 
 ENTRYPOINT ["spack"]
