@@ -8,8 +8,7 @@ RUN apk --no-cache add \
  && wget --no-check-certificate -O - https://github.com/LLNL/spack/archive/${SPACK_VERSION}.tar.gz | tar xz \
  && mv /spack-* /spack \
  && rm -rf /var/cache/apk/* \
- && source $SPACK_ROOT/share/spack/setup-env.sh \
- && spack bootstrap
+ && bash -c "source /spack/share/spack/setup-env.sh && spack bootstrap"
 
 ENV SPACK_ROOT=/spack
 ENV PATH=/usr/local/bin/patch:$PATH:/spack/bin
