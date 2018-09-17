@@ -1,6 +1,10 @@
 #!/bin/bash
 set -ex
 
+PKG_SPEC=$1
+CMD_NAME=$2
+IMG_NAME=$3
+
 BASE_IMAGES=(
   'alpine:3.5'
   'alpine:3.6'
@@ -57,15 +61,16 @@ function build {
   cp Dockerfile.$1 Dockerfile
   sed -i "s/{{BASE_IMG}}/${2}/" Dockerfile
 
-  TAG=${SPACK_VERSION}-$(echo $2 | sed 's/:/-/')
-  IMG=ivotron/spack:$TAG
-  docker build --build-arg SPACK_VERSION=$SPACK_VERSION -t $IMG .
+  TAG=$(echo $2 | sed 's/:/-/')
+  IMG=$IMG_NAME:$TAG
+  docker build \
+    --build-arg SPACK_VERSION=$SPACK_VERSION \
+    --build-arg CMD_NAME=$CMD_NAME \
+    --build-arg PKG_SPEC=$PKG_SPEC \
+    -t $IMG .
   rm Dockerfile
 
-  # test by installing a package
-  docker run --rm $IMG install --show-log-on-error tree
-
-  docker push $IMG
+  #docker push $IMG
 }
 
 for img in "${BASE_IMAGES[@]}"; do
