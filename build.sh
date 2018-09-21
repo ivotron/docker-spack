@@ -59,7 +59,7 @@ SPACK_VERSION="develop"
 
 function build {
   cp Dockerfile.$1 Dockerfile
-  sed -i "s/{{BASE_IMG}}/${2}/" Dockerfile
+  sed -i .bk "s/{{BASE_IMG}}/${2}/" Dockerfile
 
   TAG=$(echo $2 | sed 's/:/-/')
   IMG=$IMG_NAME:$TAG
@@ -69,6 +69,7 @@ function build {
     --build-arg PKG_SPEC=$PKG_SPEC \
     -t $IMG .
   rm Dockerfile
+  rm *.bk
 
   #docker push $IMG
 }
