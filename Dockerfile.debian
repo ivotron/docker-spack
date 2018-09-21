@@ -1,6 +1,8 @@
 FROM {{BASE_IMG}}
 
 ARG SPACK_VERSION
+ARG PKG_SPEC
+ARG CMD_NAME
 
 RUN apt-get update \
  && apt-get install -y \
@@ -9,10 +11,12 @@ RUN apt-get update \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
  && wget --no-check-certificate -O - https://github.com/LLNL/spack/archive/${SPACK_VERSION}.tar.gz | tar xz \
  && mv /spack-* /spack \
- && source /spack/share/spack/setup-env.sh \
- && spack bootstrap
+ && /spack/bin/spack install $PKG_SPEC \
+ && /spack/bin/spack view -d yes hard / $PKG_SPEC \
+ && rm -r /spack \
+ && apt-get -y remove wget curl unzip git \
+ && echo $CMD_NAME > /root/cmd_name
 
-ENV SPACK_ROOT=/spack
-ENV PATH=$PATH:/spack/bin
+ COPY entrypoint.sh /root/entrypoint.sh
 
-ENTRYPOINT ["spack"]
+ ENTRYPOINT ["/root/entrypoint.sh"]

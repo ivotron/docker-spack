@@ -1,17 +1,22 @@
 FROM {{BASE_IMG}}
 
 ARG SPACK_VERSION
+ARG PKG_SPEC
+ARG CMD_NAME
 
 RUN yum -y install \
-      wget gcc gcc-c++ gcc-gfortran make glibc-devel tar curl python perl patch 
-      unzip git \
+      wget gcc gcc-c++ gcc-gfortran make glibc-devel \
+      tar curl python perl patch unzip git \
  && yum clean all \
  && wget --no-check-certificate -O - https://github.com/LLNL/spack/archive/${SPACK_VERSION}.tar.gz | tar xz \
  && mv /spack-* /spack \
- && source /spack/share/spack/setup-env.sh \
- && spack bootstrap
+ && /spack/bin/spack install $PKG_SPEC \
+ && /spack/bin/spack view -d yes hard / $PKG_SPEC \
+ && rm -r /spack \
+ && yum -y remove \
+       wget perl patch unzip git \
+ && echo $CMD_NAME > /root/cmd_name
 
-ENV SPACK_ROOT=/spack
-ENV PATH=$PATH:/spack/bin
+COPY entrypoint.sh /root/entrypoint.sh
 
-ENTRYPOINT ["spack"]
+ENTRYPOINT ["/root/entrypoint.sh"]
