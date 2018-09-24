@@ -15,7 +15,6 @@ BASE_IMAGES=(
   'centos:6.8'
   'centos:6.9'
   'centos:6.10'
-  'centos:6.10'
   'centos:7.1.1503'
   'centos:7.2.1511'
   'centos:7.3.1611'
@@ -32,8 +31,6 @@ BASE_IMAGES=(
   'fedora:29'
   'ubuntu:14.04'
   'ubuntu:16.04'
-  'ubuntu:16.10'
-  'ubuntu:17.04'
   'ubuntu:17.10'
   'ubuntu:18.04'
   'ubuntu:18.10'
@@ -52,7 +49,9 @@ BASE_IMAGES=(
 #   opensuse/leap:15.0
 #   photon:1.0
 #   photon:2.0
-#  'ubuntu:12.04'
+#   ubuntu:12.04
+#   ubuntu:16.10
+#   ubuntu:17.04
 # }
 
 SPACK_VERSION="develop"
