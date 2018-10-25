@@ -18,6 +18,8 @@ RUN apk --no-cache add \
       patch perl linux-headers xz git \
  && echo $CMD_NAME > /root/cmd_name
 
+RUN apk info -v > /root/packages.txt
+
 COPY entrypoint.sh /root/entrypoint.sh
 
 ENTRYPOINT ["/root/entrypoint.sh"]

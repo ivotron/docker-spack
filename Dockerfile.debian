@@ -18,6 +18,8 @@ RUN apt-get update \
  && apt-get -y remove wget curl unzip git \
  && echo $CMD_NAME > /root/cmd_name
 
+ RUN dpkg --list > /root/packages.txt
+
  COPY entrypoint.sh /root/entrypoint.sh
 
  ENTRYPOINT ["/root/entrypoint.sh"]
