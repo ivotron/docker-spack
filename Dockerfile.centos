@@ -16,7 +16,7 @@ RUN yum -y install \
  && echo $CMD_NAME > /root/cmd_name \
  && yum clean all
 
-RUN rpm -qa > /root/packages.txt
+RUN yum list installed > /root/packages.txt
 
 COPY entrypoint.sh /root/entrypoint.sh
 
