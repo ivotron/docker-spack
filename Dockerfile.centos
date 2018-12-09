@@ -7,8 +7,7 @@ ARG CMD_NAME
 RUN yum -y install \
       wget gcc gcc-c++ gcc-gfortran make glibc-devel \
       tar curl python perl patch unzip git ca-certificates libcurl nss \
- && wget --no-check-certificate -O - https://github.com/LLNL/spack/archive/${SPACK_VERSION}.tar.gz | tar xz \
- && mv /spack-* /spack \
+ && git clone https://github.com/spack/spack \
  && /spack/bin/spack install $PKG_SPEC \
  && /spack/bin/spack spec --yaml $PKG_SPEC > /root/spec.yaml \
  && /spack/bin/spack view -d yes hard / $PKG_SPEC \

@@ -6,11 +6,10 @@ ARG CMD_NAME
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends --no-install-suggests \
-      build-essential wget tar python-minimal \
-      curl gfortran unzip git \
+      build-essential wget tar python \
+      curl gfortran unzip git ca-certificates \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
- && wget --no-check-certificate -O - https://github.com/LLNL/spack/archive/${SPACK_VERSION}.tar.gz | tar xz \
- && mv /spack-* /spack \
+ && git clone https://github.com/spack/spack \
  && /spack/bin/spack install $PKG_SPEC \
  && /spack/bin/spack spec --yaml $PKG_SPEC > /root/spec.yaml \
  && /spack/bin/spack view -d yes hard / $PKG_SPEC \
