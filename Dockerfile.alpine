@@ -3,21 +3,26 @@ FROM {{BASE_IMG}} AS builder
 ARG SPACK_VERSION
 ARG PKG_SPEC
 ARG CMD_NAME
+ARG LOCATION
 
 RUN apk --no-cache add \
       build-base wget tar python2 curl bash procps \
-      gfortran patch perl linux-headers xz git \
- && git clone https://github.com/spack/spack \
+      gfortran patch perl linux-headers xz git
+
+RUN git clone https://github.com/spack/spack \
  && /spack/bin/spack install $PKG_SPEC \
  && /spack/bin/spack spec --yaml $PKG_SPEC > /root/spec.yaml \
  && /spack/bin/spack view -d yes hard / $PKG_SPEC \
- && rm -r /spack \
- && apk --no-cache del \
+ && rm -r /spack
+
+RUN apk --no-cache del \
       wget tar python2 curl procps \
       patch perl linux-headers xz git \
- && echo $CMD_NAME > /root/cmd_name
+&& echo $CMD_NAME > /root/cmd_name
 
-RUN apk info -v > /root/packages.txt
+COPY get_runtime_dependencies.sh /root/get_runtime_dependencies.sh
+
+RUN /root/get_runtime_dependencies.sh $LOCATION alpine
 
 COPY entrypoint.sh /root/entrypoint.sh
 

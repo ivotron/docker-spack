@@ -3,19 +3,24 @@ FROM {{BASE_IMG}}
 ARG SPACK_VERSION
 ARG PKG_SPEC
 ARG CMD_NAME
+ARG LOCATION
 
 RUN yum -y install \
       wget gcc gcc-c++ gcc-gfortran make glibc-devel \
-      tar curl python perl patch unzip git ca-certificates libcurl nss \
- && git clone https://github.com/spack/spack \
+      tar curl python perl patch unzip git ca-certificates libcurl nss
+
+RUN git clone https://github.com/spack/spack \
  && /spack/bin/spack install $PKG_SPEC \
  && /spack/bin/spack spec --yaml $PKG_SPEC > /root/spec.yaml \
  && /spack/bin/spack view -d yes hard / $PKG_SPEC \
- && rm -r /spack \
- && echo $CMD_NAME > /root/cmd_name \
- && yum clean all
+ && rm -r /spack
 
-RUN yum list installed > /root/packages.txt
+RUN yum clean all \
+ && echo $CMD_NAME > /root/cmd_name
+
+COPY get_runtime_dependencies.sh /root/get_runtime_dependencies.sh
+
+RUN /root/get_runtime_dependencies.sh $LOCATION centos
 
 COPY entrypoint.sh /root/entrypoint.sh
 

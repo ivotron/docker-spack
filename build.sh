@@ -4,6 +4,7 @@ set -ex
 PKG_SPEC=$1
 CMD_NAME=$2
 IMG_NAME=$3
+LOCATION=$4
 
 BASE_IMAGES=(
   'alpine:3.5'
@@ -31,6 +32,8 @@ BASE_IMAGES=(
   'fedora:29'
   'ubuntu:14.04'
   'ubuntu:16.04'
+  'ubuntu:16.10'
+  'ubuntu:17.04'
   'ubuntu:17.10'
   'ubuntu:18.04'
   'ubuntu:18.10'
@@ -49,9 +52,7 @@ BASE_IMAGES=(
 #   opensuse/leap:15.0
 #   photon:1.0
 #   photon:2.0
-#   ubuntu:12.04
-#   ubuntu:16.10
-#   ubuntu:17.04
+#  'ubuntu:12.04'
 # }
 
 SPACK_VERSION="develop"
@@ -62,11 +63,21 @@ function build {
 
   TAG=$(echo $2 | sed 's/:/-/')
   IMG=$IMG_NAME:$TAG
-  docker build \
-    --build-arg SPACK_VERSION=$SPACK_VERSION \
-    --build-arg CMD_NAME=$CMD_NAME \
-    --build-arg PKG_SPEC=$PKG_SPEC \
-    -t $IMG .
+  if [[ $LOCATION != '' ]]; then
+    docker build \
+      --build-arg SPACK_VERSION=$SPACK_VERSION \
+      --build-arg CMD_NAME=$CMD_NAME \
+      --build-arg PKG_SPEC=$PKG_SPEC \
+      --build-arg LOCATION=$LOCATION \
+      -t $IMG .
+    else
+      docker build \
+        --build-arg SPACK_VERSION=$SPACK_VERSION \
+        --build-arg CMD_NAME=$CMD_NAME \
+        --build-arg PKG_SPEC=$PKG_SPEC \
+        -t $IMG .
+    fi
+
   rm Dockerfile
 
   #docker push $IMG

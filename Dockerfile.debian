@@ -3,22 +3,27 @@ FROM {{BASE_IMG}}
 ARG SPACK_VERSION
 ARG PKG_SPEC
 ARG CMD_NAME
+ARG LOCATION
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends --no-install-suggests \
       build-essential wget tar python \
       curl gfortran unzip git ca-certificates \
- && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
- && git clone https://github.com/spack/spack \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN git clone https://github.com/spack/spack \
  && /spack/bin/spack install $PKG_SPEC \
  && /spack/bin/spack spec --yaml $PKG_SPEC > /root/spec.yaml \
  && /spack/bin/spack view -d yes hard / $PKG_SPEC \
- && rm -r /spack \
- && apt-get -y remove wget curl unzip git \
+ && rm -r /spack
+
+RUN apt-get -y remove wget curl unzip git \
  && echo $CMD_NAME > /root/cmd_name
 
- RUN dpkg --list > /root/packages.txt
+COPY get_runtime_dependencies.sh /root/get_runtime_dependencies.sh
 
- COPY entrypoint.sh /root/entrypoint.sh
+RUN /root/get_runtime_dependencies.sh $LOCATION debian
 
- ENTRYPOINT ["/root/entrypoint.sh"]
+COPY entrypoint.sh /root/entrypoint.sh
+
+ENTRYPOINT ["/root/entrypoint.sh"]
