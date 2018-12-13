@@ -1,6 +1,5 @@
 FROM {{BASE_IMG}} AS builder
 
-ARG SPACK_VERSION
 ARG PKG_SPEC
 ARG CMD_NAME
 ARG LOCATION
@@ -9,7 +8,7 @@ RUN apk --no-cache add \
       build-base wget tar python2 curl bash procps \
       gfortran patch perl linux-headers xz git
 
-RUN git clone https://github.com/spack/spack \
+RUN git clone https://github.com/spack/spack --depth=1 \
  && /spack/bin/spack install $PKG_SPEC \
  && /spack/bin/spack spec --yaml $PKG_SPEC > /root/spec.yaml \
  && /spack/bin/spack view -d yes hard / $PKG_SPEC \

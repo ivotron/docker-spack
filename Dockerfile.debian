@@ -1,6 +1,5 @@
 FROM {{BASE_IMG}}
 
-ARG SPACK_VERSION
 ARG PKG_SPEC
 ARG CMD_NAME
 ARG LOCATION
@@ -11,7 +10,7 @@ RUN apt-get update \
       curl gfortran unzip git ca-certificates \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN git clone https://github.com/spack/spack \
+RUN git clone https://github.com/spack/spack --depth=1 \
  && /spack/bin/spack install $PKG_SPEC \
  && /spack/bin/spack spec --yaml $PKG_SPEC > /root/spec.yaml \
  && /spack/bin/spack view -d yes hard / $PKG_SPEC \

@@ -1,9 +1,8 @@
 #!/bin/bash
 set -ex
 
-PKG_SPEC=$1
 CMD_NAME=$2
-IMG_NAME=$3
+TAG_NAME=$3
 LOCATION=$4
 
 BASE_IMAGES=(
@@ -55,27 +54,22 @@ BASE_IMAGES=(
 #  'ubuntu:12.04'
 # }
 
-SPACK_VERSION="develop"
-
 function build {
   cp Dockerfile.$1 Dockerfile
   sed "s/{{BASE_IMG}}/${2}/" Dockerfile.$1 > Dockerfile
 
-  TAG=$(echo $2 | sed 's/:/-/')
-  IMG=$IMG_NAME:$TAG
+  TAG=$TAG_NAME:$(echo $2 | sed 's/:/-/')
   if [[ $LOCATION != '' ]]; then
     docker build \
-      --build-arg SPACK_VERSION=$SPACK_VERSION \
       --build-arg CMD_NAME=$CMD_NAME \
       --build-arg PKG_SPEC=$PKG_SPEC \
       --build-arg LOCATION=$LOCATION \
-      -t $IMG .
+      -t $TAG .
     else
       docker build \
-        --build-arg SPACK_VERSION=$SPACK_VERSION \
         --build-arg CMD_NAME=$CMD_NAME \
         --build-arg PKG_SPEC=$PKG_SPEC \
-        -t $IMG .
+        -t $TAG .
     fi
 
   rm Dockerfile
