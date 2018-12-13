@@ -9,7 +9,7 @@ output_file="/root/runtime_applications.yaml"
 
 if [[ $package != '' ]]; then
 
-  ldd "$package" > "$input"
+  ldd "$package" > "$input_file"
   echo "base_packages:" > "$output_file"
 
   while IFS= read -r line
@@ -47,8 +47,8 @@ if [[ $package != '' ]]; then
         echo "  - $application: $version" >> "$output_file"
       fi
     fi
-  done < "$input"
+  done < "$input_file"
 
-  rm "$input"
+  rm "$input_file"
 
 fi
