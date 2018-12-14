@@ -1,6 +1,7 @@
 #!/bin/bash
 set -ex
 
+PKG_SPEC=$1
 CMD_NAME=$2
 TAG_NAME=$3
 LOCATION=$4
