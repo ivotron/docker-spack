@@ -32,9 +32,9 @@ BASE_IMAGES=(
   'fedora:29'
   'ubuntu:14.04'
   'ubuntu:16.04'
-  'ubuntu:16.10'
-  'ubuntu:17.04'
-  'ubuntu:17.10'
+  # 'ubuntu:16.10'
+  # 'ubuntu:17.04'
+  # 'ubuntu:17.10'
   'ubuntu:18.04'
   'ubuntu:18.10'
 )
