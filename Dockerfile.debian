@@ -20,9 +20,11 @@ RUN apt-get -y remove wget curl unzip git \
  && echo $CMD_NAME > /root/cmd_name
 
 COPY get_runtime_dependencies.sh /root/get_runtime_dependencies.sh
+RUN chmod 755 /root/get_runtime_dependencies.sh
 
 RUN /root/get_runtime_dependencies.sh $LOCATION debian
 
 COPY entrypoint.sh /root/entrypoint.sh
+RUN chmod 755 /root/entrypoint.sh
 
 ENTRYPOINT ["/root/entrypoint.sh"]
