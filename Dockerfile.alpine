@@ -8,11 +8,11 @@ RUN apk --no-cache add \
       build-base wget tar python2 curl bash procps \
       gfortran patch perl linux-headers xz git
 
-RUN git clone https://github.com/spack/spack --depth=1 \
- && /spack/bin/spack install $PKG_SPEC \
- && /spack/bin/spack spec --yaml $PKG_SPEC > /root/spec.yaml \
- && /spack/bin/spack view -d yes hard / $PKG_SPEC \
- && rm -r /spack
+RUN git clone https://github.com/spack/spack --depth=1
+RUN /spack/bin/spack install $PKG_SPEC
+RUN /spack/bin/spack spec --yaml $PKG_SPEC > /root/spec.yaml
+RUN /spack/bin/spack view -d yes hard -i / $PKG_SPEC
+RUN rm -r /spack
 
 RUN apk --no-cache del \
       wget tar python2 curl procps \

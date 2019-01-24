@@ -11,10 +11,10 @@ RUN apt-get update \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN git clone https://github.com/spack/spack --depth=1 \
- && /spack/bin/spack install $PKG_SPEC \
- && /spack/bin/spack spec --yaml $PKG_SPEC > /root/spec.yaml \
- && /spack/bin/spack view -d yes hard / $PKG_SPEC \
- && rm -r /spack
+RUN /spack/bin/spack install $PKG_SPEC \
+RUN /spack/bin/spack spec --yaml $PKG_SPEC > /root/spec.yaml \
+RUN /spack/bin/spack view -d yes hard -i / $PKG_SPEC \
+RUN rm -r /spack
 
 RUN apt-get -y remove wget curl unzip git \
  && echo $CMD_NAME > /root/cmd_name
